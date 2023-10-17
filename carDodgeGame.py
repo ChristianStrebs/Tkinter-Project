@@ -1,7 +1,8 @@
 from tkinter import *
 import random
 import time
-
+from CarClass import Car
+from CarClass import Enemy
 # Create the main window
 tk = Tk()
 tk.title("Car Dodge Game")
@@ -12,42 +13,9 @@ canvas.pack()
 tk.update()
 bg = canvas.create_rectangle(0, 0, 500, 500, fill='grey')
 
-# Create the Car class
-class Car:
-    def __init__(self, canvas, color):
-        self.canvas = canvas
-        self.id = canvas.create_rectangle(10, 10, 50, 50, fill=color)
-        self.canvas.move(self.id, 225, 325)
 
-    def draw(self):
-        pass
 
-    def move_left(self, event):
-        if event.keysym == 'Left':
-            canvas.move(self.id, -10, 0)
 
-    def move_right(self, event):
-        if event.keysym == 'Right':
-            canvas.move(self.id, 10, 0)
-    
-class Enemy:
-    def __init__(self, canvas, color):
-        self.canvas = canvas
-        self.id = canvas.create_rectangle(10, 10, 50, 50, fill=color)
-        self.canvas.move(self.id, 225, 0)
-        self.speed = random.randint(5, 15)
-    
-    def enemy_draw(self):
-        pass
-
-    def enemy_move(self):
-        canvas.move(self.id, 0, self.speed)
-
-    def enemy_spawn(self):
-        self.canvas.move(self.id, random.randint(-225, 225), 0)
-
-    def enemy_reset(self):
-        self.canvas.move(self.id, random.randint(-225, 225), -500)
 
 
 
@@ -58,7 +26,7 @@ canvas.bind_all('<KeyPress-Right>', player.move_right)
 
 # Create the Enemy instance
 enemies = []
-num_enemies = 7
+num_enemies = 10
 
 for i in range(num_enemies):
     enemies.append(Enemy(canvas, 'red'))
@@ -85,7 +53,8 @@ def check_collision():
             break
 
 game_over = False
-
+score = 0
+printed_score = 0
 while not game_over:
     for i in range(num_enemies):
         enemies[i].enemy_move()
@@ -93,9 +62,17 @@ while not game_over:
         check_collision()
         tk.update()
         time.sleep(0.005)
+        score += 1
+        if score % 200 == 0:
+            printed_score += 1
+            blank = canvas.create_rectangle(5, 0, 500, 50, fill='grey', outline='grey')
+            show_score = canvas.create_text(40, 25, text=f'Score:{printed_score}', font=('Helvetica', 13), fill='white')
+
+        
 
 overbg = canvas.create_rectangle(0, 0, 500, 500, fill='black')
 over = canvas.create_text(250, 250, text='GAME OVER', font=('Helvetica', 30), fill='red')
+end_score = canvas.create_text(250, 300, text=f'Your score was {printed_score}', font=('Helvetica', 20), fill='white')
 
 
 tk.mainloop()
