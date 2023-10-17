@@ -3,6 +3,9 @@ import random
 import time
 from CarClass import Car
 from CarClass import Enemy
+
+
+
 # Create the main window
 tk = Tk()
 tk.title("Car Dodge Game")
@@ -12,11 +15,22 @@ canvas = Canvas(tk, width=500, height=500, bd=0, highlightthickness=0)
 canvas.pack()
 tk.update()
 bg = canvas.create_rectangle(0, 0, 500, 500, fill='grey')
+for i in range(100,500,100):
+    canvas.create_line(i, 0, i, 500, fill='white', width=5)
+for j in range(100,600,100):
+    for i in range(0,500,100):
+        canvas.create_rectangle(j-50, i, j-50, 50+i, fill='yellow', outline='yellow')
 
 
 
+    def move_left(self, event):
+        if event.keysym == 'Left':
+            canvas.move(self.id, -100, 0)
 
-
+    def move_right(self, event):
+        if event.keysym == 'Right':
+            canvas.move(self.id,100, 0)
+    
 
 
 # Create the Car instance
@@ -26,21 +40,17 @@ canvas.bind_all('<KeyPress-Right>', player.move_right)
 
 # Create the Enemy instance
 enemies = []
-num_enemies = 10
+num_enemies = 8
 
 for i in range(num_enemies):
     enemies.append(Enemy(canvas, 'red'))
     enemies[i].enemy_spawn()
-
-def spawn_enemy():
-    for i in range(1):
-        enemies.append(Enemy(canvas, 'red'))
-        enemies[i].enemy_spawn()
+    
 
 def check_enemy_coords():
-    for i in range(num_enemies):
-        if canvas.coords(enemies[i].id)[1] > 500:
-            enemies[i].enemy_reset()
+    for i in enemies:
+        if canvas.coords(i.id)[1] > 500:
+            i.enemy_reset()
 
 
 def check_collision():
@@ -56,13 +66,17 @@ game_over = False
 score = 0
 printed_score = 0
 while not game_over:
-    for i in range(num_enemies):
-        enemies[i].enemy_move()
-        check_enemy_coords()
+    check_enemy_coords()
+    for i in enemies:
+        i.enemy_move()
         check_collision()
         tk.update()
         time.sleep(0.005)
         score += 1
+        if printed_score % 5 == 0 and not 0:
+            for i in enemies:
+                i.speed += 0.03
+
         if score % 200 == 0:
             printed_score += 1
             blank = canvas.create_rectangle(5, 0, 500, 50, fill='grey', outline='grey')

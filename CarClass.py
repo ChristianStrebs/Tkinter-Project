@@ -8,7 +8,7 @@ class Car:
     def __init__(self, canvas, color):
         self.canvas = canvas
         self.id = canvas.create_rectangle(10, 10, 50, 50, fill=color)
-        self.canvas.move(self.id, 225, 325)
+        self.canvas.move(self.id, 225, 375)
 
     def draw(self):
         pass
