@@ -11,6 +11,11 @@ canvas = Canvas(tk, width=500, height=500, bd=0, highlightthickness=0)
 canvas.pack()
 tk.update()
 bg = canvas.create_rectangle(0, 0, 500, 500, fill='grey')
+for i in range(100,500,100):
+    canvas.create_line(i, 0, i, 500, fill='white', width=5)
+for j in range(100,600,100):
+    for i in range(0,500,100):
+        canvas.create_rectangle(j-50, i, j-50, 50+i, fill='yellow', outline='yellow')
 
 # Create the Car class
 class Car:
@@ -24,16 +29,16 @@ class Car:
 
     def move_left(self, event):
         if event.keysym == 'Left':
-            canvas.move(self.id, -10, 0)
+            canvas.move(self.id, -100, 0)
 
     def move_right(self, event):
         if event.keysym == 'Right':
-            canvas.move(self.id, 10, 0)
+            canvas.move(self.id,100, 0)
     
 class Enemy:
-    def __init__(self, canvas, color):
+    def __init__(self, canvas,color):
         self.canvas = canvas
-        self.id = canvas.create_rectangle(10, 10, 50, 50, fill=color)
+        self.id = canvas.create_rectangle(10, 10, 50, 50, fill='red')
         self.canvas.move(self.id, 225, 0)
         self.speed = random.randint(5, 15)
     
@@ -44,10 +49,10 @@ class Enemy:
         canvas.move(self.id, 0, self.speed)
 
     def enemy_spawn(self):
-        self.canvas.move(self.id, random.randint(-225, 225), 0)
+        self.canvas.move(self.id, random.choice([-200,-100,0,100,200]), 0)
 
     def enemy_reset(self):
-        self.canvas.move(self.id, random.randint(-225, 225), -500)
+        self.canvas.move(self.id, random.choice([-200,-100,0,100,200]), -500)
 
 
 
@@ -58,15 +63,16 @@ canvas.bind_all('<KeyPress-Right>', player.move_right)
 
 # Create the Enemy instance
 enemies = []
-num_enemies = 7
+num_enemies = 8
 
 for i in range(num_enemies):
-    enemies.append(Enemy(canvas, 'red'))
+    enemies.append(Enemy(canvas, 'blue'))
     enemies[i].enemy_spawn()
+    
 
 def spawn_enemy():
     for i in range(1):
-        enemies.append(Enemy(canvas, 'red'))
+        enemies.append(Enemy(canvas, 'blue'))
         enemies[i].enemy_spawn()
 
 def check_enemy_coords():
