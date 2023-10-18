@@ -23,14 +23,6 @@ for j in range(100,600,100):
 
 
 
-    def move_left(self, event):
-        if event.keysym == 'Left':
-            canvas.move(self.id, -100, 0)
-
-    def move_right(self, event):
-        if event.keysym == 'Right':
-            canvas.move(self.id,100, 0)
-    
 
 
 # Create the Car instance
@@ -40,7 +32,7 @@ canvas.bind_all('<KeyPress-Right>', player.move_right)
 
 # Create the Enemy instance
 enemies = []
-num_enemies = 8
+num_enemies = 9
 
 for i in range(num_enemies):
     enemies.append(Enemy(canvas, 'red'))
